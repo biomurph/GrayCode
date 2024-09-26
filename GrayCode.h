@@ -27,6 +27,7 @@ class GrayCode
 
 public:
 	GrayCode(int numEncoders, int pinLatch, int pinClock, int pinSerial); 
+	GrayCode(int numEncoders, int pinLatch, int pinClock, int pinSerial, int pinInhibit); 
 	bool begin();
 	bool checkPositions();
 	uint8_t *pos;
@@ -36,6 +37,7 @@ private:
 	int _pinLatch;
 	int _pinClock;
 	int _pinSerial;
+	int _pinInhibit;
 	int _numBytes;
 	uint8_t *_pos;
 	uint8_t decodeGray(uint8_t g);
