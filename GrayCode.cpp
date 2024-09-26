@@ -36,7 +36,10 @@ bool GrayCode::begin()
 	digitalWrite(_pinClock,LOW);
 	pinMode(_pinSerial,INPUT);
 	_numBytes = _numEncoders/2;
+	Serial.println(_numEncoders);
+	Serial.println(_numBytes);
 	free(pos);
+	free(_pos);
 	if( (pos = (uint8_t *)malloc(_numEncoders)) && 
 	  (_pos = (uint8_t *)malloc(_numEncoders)) ){
 		memset(pos, 0, _numEncoders);
@@ -45,22 +48,6 @@ bool GrayCode::begin()
 	}
 	return result;
 }
-
-
-// bool Gray_Encoder::getEncoderPositions()
-// {
-// 	bool status = false; // expectations low
-// 	newCodes = shiftInCodes();
-// 	if(newCodes != oldCodes){
-// 		status = true;
-// 	}
-// 	oldCodes = newCodes;
-// 	enc1code = newCodes & 0x0F;
-// 	enc2code = (newCodes >> 4) & 0x0F;
-// 	enc1pos = decodeGray(enc1code);
-// 	enc2pos = decodeGray(enc2code);
-// 	return status;
-// }
 
 /*
 	@brief	Latch the PISO data and then shift in Gray codes.
@@ -71,10 +58,10 @@ bool GrayCode::begin()
 			False if no encoders have changed.
 
 */
-bool GrayCode::checkEncoderPositions()
+bool GrayCode::checkPositions()
 {
+	bool same = true;
 	uint8_t b = 0x00;
-	// int numBytes = _numEncoders/2;
 	int posCounter = 0;
 	digitalWrite(_pinLatch,LOW);
 	delayMicroseconds(50);
@@ -87,25 +74,24 @@ bool GrayCode::checkEncoderPositions()
 			digitalWrite(_pinClock,LOW);
 			delayMicroseconds(50);
 		}
-		for(int k; k=0; k<2){
+		for(int k=0; k<2; k++){
 			pos[posCounter] = (b >>(k*4)) & 0x0F;
 			pos[posCounter] = decodeGray(pos[posCounter]);
+			if(pos[posCounter] != _pos[posCounter]){ same = false; }
+			_pos[posCounter] = pos[posCounter];
 			posCounter++;
 		}
-	}
-	bool same = true;
-	int i=0;
-	while(i < _numEncoders && same){
-		same = pos[i] == _pos[i];
-		i++;
-	}
-	if(!same){
-		memcpy(&_pos, &pos, sizeof(pos));
 	}
 	return same;
 }
 
+/*
+	@brief	Transform Gray code into binary code.
+	@param	1 byte with Gray encoded number.
+	@return	True if any of the encoders has changed.
+			False if no encoders have changed.
 
+*/
 uint8_t GrayCode::decodeGray(uint8_t g)
 {
 	uint8_t mask = g;

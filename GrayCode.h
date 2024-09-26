@@ -22,13 +22,13 @@
 #include <stdlib.h>
 
 
-class Gray_Encoder
+class GrayCode
 {
 
 public:
-	Gray_Encoder(int numEncoders, int pinLatch, int pinClock, int pinSerial); 
+	GrayCode(int numEncoders, int pinLatch, int pinClock, int pinSerial); 
 	bool begin();
-	bool checkEncoderPositions();
+	bool checkPositions();
 	uint8_t *pos;
 
 private:

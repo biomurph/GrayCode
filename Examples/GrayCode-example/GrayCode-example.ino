@@ -14,20 +14,19 @@ void setup() {
   while(!Serial){}
   delay(500);
   Serial.println("Gray Code Encoder Example");
-  
   if(!gray.begin()){
     Serial.println("Memory allocation failed");
   }
-  
 }
 
 void loop() {
 
-  if(gray.checkPositions()){
+  if(!gray.checkPositions()){
     for(int i=0; i<NUM_ENCODERS; i++){
       Serial.print(gray.pos[i],HEX);
       Serial.print("\t");
     }
+    Serial.println();
   }
   delay(10);
 
