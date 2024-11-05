@@ -29,6 +29,8 @@ GrayCode::GrayCode(int numEncoders, int pinLatch, int pinClock, int pinSerial)
     @brief  Constructor Option
 	@note	If you have a project that requires use of the inhibit pin
 			on the SIPO, you can add it with this constructor option.
+			By default, the inhibit pin is pulled low on the PCB
+			so you don't need to think about it unless you have to.
 */
 GrayCode::GrayCode(int numEncoders, int pinLatch, int pinClock, int pinSerial, int pinInhibit)
 {
@@ -120,10 +122,10 @@ bool GrayCode::checkPositions()
 
 /*
 	@brief	Transform Gray code into binary code.
-	@param	1 byte with Gray encoded number.
-	@return	True if any of the encoders has changed.
-			False if no encoders have changed.
-
+	@param	1 byte with Gray encoded number in the low nibble.
+	@return	Binary translation of the Gray code
+			0 to 7 for 8 position switches
+			0 to F for 16 position switches
 */
 uint8_t GrayCode::decodeGray(uint8_t g)
 {
