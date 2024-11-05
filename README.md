@@ -28,12 +28,13 @@ and false if there is a memory allocation error.
 
 	bool checkPositions()
 	
-Update the position array with a new reading from the shift register(s). 
+Update the `pos` array with a new reading from the shift register(s). 
 This function checks the newly read encoder positions agains saved positions from the last reading.
 It will return true when the positions have changed, and false if they are the same.
-After calling, the pos array will contain the newly read positions regardles of returned value.
+After calling, the `pos` array will contain the newly read positions regardles of returned value.
 
 ## Encoder Data
 
 The encoder data is stored in a user accessible array called `pos`. 
 Depending on how many encoders you are using, you will be able to access their position values via this array. In the physical world, the encoder closest to the PISO bus that is connected to your Arduino board will be the first value `pos[0]` in the array.
+
