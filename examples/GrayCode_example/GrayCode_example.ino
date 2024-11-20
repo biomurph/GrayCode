@@ -21,16 +21,22 @@
 #define SHIFT_CLK 2     // shift register clock pin
 #define SHIFT_SERIAL 7  // shift register serial out pin
 
-GrayCode gray(NUM_ENCODERS, SHIFT_LATCH, SHIFT_CLK, SHIFT_SERIAL);
+// Tell the library what type of encoders you are using.
+// Could be 8, 12, or 16 position type
+// The first switch is S1 on the first board connected to your Arduino
+// The switches progress in the order S1, S2, S1, S2... in your daisy-chain
+int switchType[NUM_ENCODERS] = {8,8,8,8};
+
+GrayCode gray(SHIFT_LATCH, SHIFT_CLK, SHIFT_SERIAL);
 
 void setup() {
   Serial.begin(115200);
   while(!Serial){}
   delay(500);
   Serial.println("Gray Code Encoder Example");
-  // The begin() function will return true if memory is successfully allocated 
+  // The begin(int*,int) function will return true if memory is successfully allocated 
   // for the number of encoders that you want to use, and false if not enough memory
-  if(!gray.begin()){
+  if(!gray.begin(switchType, NUM_ENCODERS)){
     Serial.println("Memory allocation failed");
   }
 }
